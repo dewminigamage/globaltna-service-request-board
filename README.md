@@ -204,4 +204,4 @@ Tests cover the jobs API endpoints using Jest and Supertest with mocked Mongoose
 
 - Branch: `Frontend`
 - Root Directory: `frontend`
-- Environment variable: `NEXT_PUBLIC_API_URL` = your Render URL + `/api`
+- Environment variable: `NEXT_PUBLIC_API_URL` = `https://globaltna-service-request-board.onrender.com/api`
