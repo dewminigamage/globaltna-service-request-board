@@ -1,32 +1,38 @@
-const mongoose = require('mongoose');
-require('dotenv').config();
+const mongoose = require("mongoose");
+require("dotenv").config();
 
 // Connect to MongoDB for testing
 beforeAll(async () => {
   try {
     // IMPORTANT: Always use a separate test database to avoid deleting production data
     let mongoUri = process.env.MONGODB_TEST_URI;
-    
+
     if (!mongoUri) {
       // If no test URI is set, create one by appending '-test' to the production database name
-      if (process.env.MONGODB_URI && process.env.MONGODB_URI.includes('globaltna')) {
-        mongoUri = process.env.MONGODB_URI.replace('globaltna', 'globaltna-test');
+      if (
+        process.env.MONGODB_URI &&
+        process.env.MONGODB_URI.includes("globaltna")
+      ) {
+        mongoUri = process.env.MONGODB_URI.replace(
+          "globaltna",
+          "globaltna-test",
+        );
       } else {
         // Fallback for local MongoDB
-        mongoUri = 'mongodb://localhost:27017/globaltna-test';
+        mongoUri = "mongodb://localhost:27017/globaltna-test";
       }
     }
-    
-    console.log('Connecting to test database...');
-    
+
+    console.log("Connecting to test database...");
+
     await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    
-    console.log('✓ Test database connected');
+
+    console.log("✓ Test database connected");
   } catch (err) {
-    console.error('MongoDB connection failed:', err.message);
+    console.error("MongoDB connection failed:", err.message);
     process.exit(1);
   }
 });
@@ -36,7 +42,7 @@ afterAll(async () => {
   try {
     await mongoose.disconnect();
   } catch (err) {
-    console.error('MongoDB disconnection failed:', err.message);
+    console.error("MongoDB disconnection failed:", err.message);
   }
 });
 

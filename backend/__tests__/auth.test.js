@@ -1,9 +1,9 @@
-const request = require('supertest');
-const mongoose = require('mongoose');
-const app = require('../app');
-const User = require('../models/User');
+const request = require("supertest");
+const mongoose = require("mongoose");
+const app = require("../app");
+const User = require("../models/User");
 
-describe('Auth Endpoints', () => {
+describe("Auth Endpoints", () => {
   beforeEach(async () => {
     // Clear all mocks before each test
     jest.clearAllMocks();
@@ -18,150 +18,128 @@ describe('Auth Endpoints', () => {
     }
   });
 
-  describe('POST /api/auth/register', () => {
-    it('should register a new user successfully', async () => {
-      const res = await request(app)
-        .post('/api/auth/register')
-        .send({
-          name: 'John Doe',
-          email: 'john@example.com',
-          password: 'password123',
-        });
+  describe("POST /api/auth/register", () => {
+    it("should register a new user successfully", async () => {
+      const res = await request(app).post("/api/auth/register").send({
+        name: "John Doe",
+        email: "john@example.com",
+        password: "password123",
+      });
 
       expect(res.statusCode).toBe(201);
-      expect(res.body).toHaveProperty('token');
+      expect(res.body).toHaveProperty("token");
       expect(res.body.user).toMatchObject({
-        name: 'John Doe',
-        email: 'john@example.com',
+        name: "John Doe",
+        email: "john@example.com",
       });
     });
 
-    it('should fail if name, email, or password is missing', async () => {
-      const res = await request(app)
-        .post('/api/auth/register')
-        .send({
-          name: 'John Doe',
-          email: 'john@example.com',
-          // password missing
-        });
+    it("should fail if name, email, or password is missing", async () => {
+      const res = await request(app).post("/api/auth/register").send({
+        name: "John Doe",
+        email: "john@example.com",
+        // password missing
+      });
 
       expect(res.statusCode).toBe(400);
-      expect(res.body.message).toBe('Name, email and password are required');
+      expect(res.body.message).toBe("Name, email and password are required");
     });
 
-    it('should fail if password is less than 6 characters', async () => {
-      const res = await request(app)
-        .post('/api/auth/register')
-        .send({
-          name: 'John Doe',
-          email: 'john@example.com',
-          password: '123',
-        });
+    it("should fail if password is less than 6 characters", async () => {
+      const res = await request(app).post("/api/auth/register").send({
+        name: "John Doe",
+        email: "john@example.com",
+        password: "123",
+      });
 
       expect(res.statusCode).toBe(400);
-      expect(res.body.message).toBe('Password must be at least 6 characters');
+      expect(res.body.message).toBe("Password must be at least 6 characters");
     });
 
-    it('should fail if email is already registered', async () => {
+    it("should fail if email is already registered", async () => {
       // Register first user
-      await request(app)
-        .post('/api/auth/register')
-        .send({
-          name: 'John Doe',
-          email: 'john@example.com',
-          password: 'password123',
-        });
+      await request(app).post("/api/auth/register").send({
+        name: "John Doe",
+        email: "john@example.com",
+        password: "password123",
+      });
 
       // Try to register with same email
-      const res = await request(app)
-        .post('/api/auth/register')
-        .send({
-          name: 'Jane Doe',
-          email: 'john@example.com',
-          password: 'password123',
-        });
+      const res = await request(app).post("/api/auth/register").send({
+        name: "Jane Doe",
+        email: "john@example.com",
+        password: "password123",
+      });
 
       expect(res.statusCode).toBe(409);
-      expect(res.body.message).toBe('Email already registered');
+      expect(res.body.message).toBe("Email already registered");
     });
   });
 
-  describe('POST /api/auth/login', () => {
+  describe("POST /api/auth/login", () => {
     beforeEach(async () => {
       // Create a test user before login tests
-      await request(app)
-        .post('/api/auth/register')
-        .send({
-          name: 'Test User',
-          email: 'test@example.com',
-          password: 'password123',
-        });
-    });
-
-    it('should login user with correct credentials', async () => {
-      const res = await request(app)
-        .post('/api/auth/login')
-        .send({
-          email: 'test@example.com',
-          password: 'password123',
-        });
-
-      expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveProperty('token');
-      expect(res.body.user).toMatchObject({
-        email: 'test@example.com',
-        name: 'Test User',
+      await request(app).post("/api/auth/register").send({
+        name: "Test User",
+        email: "test@example.com",
+        password: "password123",
       });
     });
 
-    it('should fail if email or password is missing', async () => {
-      const res = await request(app)
-        .post('/api/auth/login')
-        .send({
-          email: 'test@example.com',
-          // password missing
-        });
+    it("should login user with correct credentials", async () => {
+      const res = await request(app).post("/api/auth/login").send({
+        email: "test@example.com",
+        password: "password123",
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toHaveProperty("token");
+      expect(res.body.user).toMatchObject({
+        email: "test@example.com",
+        name: "Test User",
+      });
+    });
+
+    it("should fail if email or password is missing", async () => {
+      const res = await request(app).post("/api/auth/login").send({
+        email: "test@example.com",
+        // password missing
+      });
 
       expect(res.statusCode).toBe(400);
-      expect(res.body.message).toBe('Email and password are required');
+      expect(res.body.message).toBe("Email and password are required");
     });
 
-    it('should fail with invalid email', async () => {
-      const res = await request(app)
-        .post('/api/auth/login')
-        .send({
-          email: 'nonexistent@example.com',
-          password: 'password123',
-        });
+    it("should fail with invalid email", async () => {
+      const res = await request(app).post("/api/auth/login").send({
+        email: "nonexistent@example.com",
+        password: "password123",
+      });
 
       expect(res.statusCode).toBe(401);
-      expect(res.body.message).toBe('Invalid email or password');
+      expect(res.body.message).toBe("Invalid email or password");
     });
 
-    it('should fail with incorrect password', async () => {
-      const res = await request(app)
-        .post('/api/auth/login')
-        .send({
-          email: 'test@example.com',
-          password: 'wrongpassword',
-        });
+    it("should fail with incorrect password", async () => {
+      const res = await request(app).post("/api/auth/login").send({
+        email: "test@example.com",
+        password: "wrongpassword",
+      });
 
       expect(res.statusCode).toBe(401);
-      expect(res.body.message).toBe('Invalid email or password');
+      expect(res.body.message).toBe("Invalid email or password");
     });
 
-    it('should return a valid JWT token', async () => {
-      const res = await request(app)
-        .post('/api/auth/login')
-        .send({
-          email: 'test@example.com',
-          password: 'password123',
-        });
+    it("should return a valid JWT token", async () => {
+      const res = await request(app).post("/api/auth/login").send({
+        email: "test@example.com",
+        password: "password123",
+      });
 
       expect(res.statusCode).toBe(200);
       expect(res.body.token).toBeTruthy();
       // Token should be a valid JWT (three parts separated by dots)
-      expect(res.body.token.split('.')).toHaveLength(3);
+      expect(res.body.token.split(".")).toHaveLength(3);
     });
   });
 });

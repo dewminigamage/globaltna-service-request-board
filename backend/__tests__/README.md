@@ -5,6 +5,7 @@ This directory contains comprehensive unit tests for the Global TNA Service Requ
 ## Test Coverage
 
 ### Authentication Tests (`auth.test.js`)
+
 - **POST /api/auth/register**
   - ✅ Register new user successfully
   - ✅ Validate required fields (name, email, password)
@@ -19,6 +20,7 @@ This directory contains comprehensive unit tests for the Global TNA Service Requ
   - ✅ Return valid JWT token
 
 ### Jobs Tests (`jobs.test.js`)
+
 - **GET /api/jobs**
   - ✅ Retrieve all jobs
   - ✅ Filter by category
@@ -52,6 +54,7 @@ This directory contains comprehensive unit tests for the Global TNA Service Requ
 ## Running Tests
 
 ### Prerequisites
+
 Ensure MongoDB is running and accessible. By default, tests use the URI from your `.env` file.
 
 ### Commands
@@ -74,6 +77,7 @@ Tests use the MongoDB connection specified in `.env`. If you want to use a separ
 ## Test Structure
 
 Each test file follows this pattern:
+
 1. **Setup**: Connect to database, create test data
 2. **Tests**: Each test case is isolated with `beforeEach` and `afterEach` hooks
 3. **Cleanup**: Clear database and disconnect after all tests
@@ -90,16 +94,19 @@ To add tests for new endpoints:
 ## Debugging Tests
 
 Run a single test file:
+
 ```bash
 npm test -- auth.test.js
 ```
 
 Run a single test:
+
 ```bash
 npm test -- --testNamePattern="should register a new user successfully"
 ```
 
 View detailed output:
+
 ```bash
 npm test -- --verbose
 ```
@@ -115,13 +122,16 @@ npm test -- --verbose
 ## Troubleshooting
 
 ### Tests timing out
+
 - Ensure MongoDB is running
 - Check your `MONGODB_URI` in `.env`
 - Increase timeout in jest.config.js if needed
 
 ### "Not authorised" errors in job tests
+
 - Verify JWT_SECRET in .env matches between auth and job tests
 - Check that tokens are being set in Authorization headers
 
 ### Database already exists errors
+
 - Tests automatically clean up, but if stuck, manually delete test data or use a separate test database
